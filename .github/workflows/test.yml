@@ -1,17 +1,22 @@
 name: Test & lint
 
+on:
+  push:
+    branches: main
+  pull_request:
+
 jobs:
   check:
-    name: Test & lint ${{matrix.config.os }}
-    runs-on: ${{matrix.config.os }}
+    name: Test & lint ${{ matrix.config.os }}
+    runs-on: ${{ matrix.config.os }}
 
     strategy:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest}
-          - {os: ubuntu-latest}
-          - {os: windows-latest}
+          - { os: macos-latest }
+          - { os: ubuntu-latest }
+          - { os: windows-latest }
 
     steps:
       - uses: actions/checkout@v4
