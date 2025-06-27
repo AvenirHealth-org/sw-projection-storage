@@ -1,0 +1,31 @@
+name: Test & lint
+
+jobs:
+  check:
+    name: Test & lint ${{matrix.config.os }}
+    runs-on: ${{matrix.config.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macos-latest}
+          - {os: ubuntu-latest}
+          - {os: windows-latest}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
+
+      - name: Run linter
+        run: uvx ruff check .
+
+      - name: Run tests
+        run: uv run pytest
