@@ -1,6 +1,7 @@
 # sw-projection-storage
 
 [![Test & lint](https://github.com/AvenirHealth-org/sw-projection-storage/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/AvenirHealth-org/sw-projection-storage/actions/workflows/test.yml)
+[![Build Docker Image](https://github.com/AvenirHealth-org/sw-projection-storage/actions/workflows/docker.yml/badge.svg)](https://github.com/AvenirHealth-org/sw-projection-storage/actions/workflows/docker.yml)
 
 Projection data storage for Spectrum Web.
 
