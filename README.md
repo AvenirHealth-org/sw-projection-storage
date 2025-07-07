@@ -46,11 +46,11 @@ uvx ruff format
 Build the docker image
 
 ```
-docker build -t avenirhealth/sw-projection-storage .
+docker build -t avenirhealth-org/sw-projection-storage -f docker/Dockerfile .
 ```
 
 Run the docker image
 
 ```
-docker run -p 8000:8000 avenirhealth/sw-projection-storage
+docker run -p 8000:8000 avenirhealth-org/sw-projection-storage
 ```
