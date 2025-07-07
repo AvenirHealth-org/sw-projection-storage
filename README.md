@@ -43,6 +43,8 @@ uvx ruff format
 
 # Docker
 
+You can either build it locally, or use the image from [GitHub package registry](https://github.com/AvenirHealth-org/sw-projection-storage/pkgs/container/sw-projection-storage)
+
 Build the docker image
 
 ```
@@ -53,4 +55,10 @@ Run the docker image
 
 ```
 docker run -p 8000:8000 avenirhealth-org/sw-projection-storage
+```
+
+Run using package registry
+
+```
+docker run -p 8000:8000 ghcr.io/avenirhealth-org/sw-projection-storage:main
 ```
