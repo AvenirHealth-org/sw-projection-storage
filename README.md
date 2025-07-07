@@ -15,6 +15,12 @@ sw-projection-storage uses [uv](https://docs.astral.sh/uv/) as a package and pro
 uv run uvicorn app.main:app --port 8000
 ```
 
+with reloading
+
+```
+uv run uvicorn app.main:app --port 8000 --reload
+```
+
 ## Run tests
 
 ```
@@ -33,4 +39,18 @@ To run autoformatter
 
 ```
 uvx ruff format
+```
+
+# Docker
+
+Build the docker image
+
+```
+docker build -t avenirhealth/sw-projection-storage .
+```
+
+Run the docker image
+
+```
+docker run -p 8000:8000 avenirhealth/sw-projection-storage
 ```
