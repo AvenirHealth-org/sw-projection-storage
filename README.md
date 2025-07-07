@@ -22,15 +22,17 @@ with reloading
 uv run uvicorn app.main:app --port 8000 --reload
 ```
 
-## Run tests
+## Tests
+
+We use [pytest](https://docs.pytest.org/en/stable/) for testing, to run the tests run
 
 ```
 uv run pytest
 ```
 
-## Run ruff
+## Lint & formatting
 
-To run lint and format checks
+We use [ruff](https://docs.astral.sh/ruff/) for linting and formatting, to run lint and format checks
 
 ```
 uvx ruff check
@@ -40,6 +42,14 @@ To run autoformatter
 
 ```
 uvx ruff format
+```
+
+## Type checking
+
+We use [basedpyright](https://docs.basedpyright.com/latest/) for type checking. We recommend installing the VSCode extension to get type checking integrated with your IDE. Can also run the checks with
+
+```
+uv run basedpyright
 ```
 
 # Docker
