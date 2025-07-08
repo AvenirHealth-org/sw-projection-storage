@@ -36,6 +36,7 @@ jobs:
           touch .env
           echo COSMOS_URL=https://localhost:8081 >> .env
           echo COSMOS_KEY=${{ secrets.COSMOS_EMULATOR_KEY }} >> .env
+          echo COSMOS_USE_EMULATOR=True >> .env
 
       - name: Install the project
         run: uv sync --locked --all-extras --dev
