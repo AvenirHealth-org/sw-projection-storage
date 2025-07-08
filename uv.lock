@@ -439,6 +439,18 @@ wheels = [
 ]
 
 [[package]]
+name = "pytest-error-for-skips"
+version = "2.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5a/96/3d77e3446430168df51af2033cb24675301b29c474b64a10c1abc5f2577a/pytest-error-for-skips-2.0.2.tar.gz", hash = "sha256:d4d0c89036a4105cabbc5e488c4078756c29cc2e5805b0694c3d9e49e52c0d11", size = 3612 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8f/0b/1408ee0604b2cdb7f095149751809403622abd6ebec2566db88ad8314de1/pytest_error_for_skips-2.0.2-py3-none-any.whl", hash = "sha256:ccc4029c04f1737aa81445c5f3599247f8a64d279741b4a66bf003782fa00492", size = 3965 },
+]
+
+[[package]]
 name = "python-dotenv"
 version = "1.1.1"
 source = { registry = "https://pypi.org/simple" }
@@ -570,6 +582,7 @@ dev = [
     { name = "basedpyright" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
+    { name = "pytest-error-for-skips" },
 ]
 
 [package.metadata]
@@ -585,6 +598,7 @@ dev = [
     { name = "basedpyright", specifier = ">=1.29.5" },
     { name = "pytest", specifier = ">=8.3.3" },
     { name = "pytest-asyncio", specifier = ">=0.24.0" },
+    { name = "pytest-error-for-skips", specifier = ">=2.0.2" },
 ]
 
 [[package]]
