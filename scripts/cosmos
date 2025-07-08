@@ -5,43 +5,11 @@ CONTAINER_NAME=cosmos-db
 IMAGE_NAME=mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
 EMULATOR_PORT=8081
 
-function import_ssl() {
-    # Ensure we save the CosmosDB emulator cert to the path expected by Python
-    CERT_PATH=$(uv run python -c "from requests.utils import DEFAULT_CA_BUNDLE_PATH; print(DEFAULT_CA_BUNDLE_PATH)")
-    CERT_LOCAL=cosmos-db-emulator.crt
-
-    elapsed=0
-    success=0
-    echo "Importing SSL cert from emulator, this can take up to 2 mins."
-    for _ in {1..30};
-    do
-        if curl --insecure --silent --fail https://localhost:$EMULATOR_PORT/_explorer/emulator.pem > $CERT_LOCAL
-        then
-            echo "Azure Cosmos DB emulator certificate downloaded successfully..."
-            echo >> $CERT_PATH
-            echo "# CosmosDB Emulator cert" >> $CERT_PATH
-            cat $CERT_LOCAL >> $CERT_PATH
-            rm $CERT_LOCAL
-            success=1
-            break
-        else
-            echo "Failed to download Azure Cosmos DB emulator certificate. $elapsed seconds passed, retrying in 5 seconds..."
-            sleep 5
-            elapsed=$(($elapsed + 5))
-        fi
-    done
-
-    if [ $success = 0 ]; then
-        echo "Failed to download cert from docker, try increasing timeout."
-        exit 1
-    fi
-}
-
 if [ "$1" = "start" ]; then
     docker pull $IMAGE_NAME
     docker run --rm -d --name=$CONTAINER_NAME -p $EMULATOR_PORT:$EMULATOR_PORT -p 10250-10255:10250-10255 $IMAGE_NAME
-    import_ssl
     echo "CosmosDB emulator started"
+    echo "Copy the URI and Primary key from https://localhost:$EMULATOR_PORT/_explorer/html into .env file as COSMOS_URL and COSMOS_KEY if this is your first time running"
 elif [ "$1" = "stop" ]; then
     docker stop $CONTAINER_NAME
     echo "CosmosDB emulator stopped"
@@ -49,7 +17,6 @@ elif [ "$1" = "restart" ]; then
     docker stop $CONTAINER_NAME || true
     docker pull $IMAGE_NAME
     docker run --rm -d --name=$CONTAINER_NAME -p $EMULATOR_PORT:$EMULATOR_PORT -p 10250-10255:10250-10255 $IMAGE_NAME
-    import_ssl
     echo "CosmosDB emulator restarted"
 else
     echo "Usage: cosmos <start|stop|restart>"

@@ -18,6 +18,13 @@ jobs:
           - { os: ubuntu-latest }
           - { os: windows-latest }
 
+    services:
+      cosmosdb:
+        image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+        ports:
+          - 8081:8081
+          - 10250-10255:10250-10255
+
     steps:
       - uses: actions/checkout@v4
 
@@ -25,6 +32,12 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
+
+      - name: Create env file
+        run: |
+          touch .env
+          echo COSMOS_URL=https://localhost:8081 >> .env
+          echo COSMOS_KEY=${{ secrets.COSMOS_EMULATOR_KEY }} >> .env
 
       - name: Install the project
         run: uv sync --locked --all-extras --dev
