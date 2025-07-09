@@ -1,50 +1,33 @@
-import urllib3
-from functools import lru_cache
 from fastapi import Depends, FastAPI
 from typing_extensions import Annotated
-from azure.cosmos import ContainerProxy, CosmosClient
+from azure.cosmos import ContainerProxy
+from azure.storage.blob import ContainerClient
 
-from . import config
 from . import cosmos
+from . import blob
 
 
 app = FastAPI()
 
 
-@lru_cache
-def get_settings():
-    return config.Settings()
-
-
-@lru_cache
-def get_cosmos_client():
-    settings = get_settings()
-    if settings.cosmos_use_emulator == "True":
-        # We expect this to raise warnings as we're going to
-        # accept an unverified connection to cosmosDB emulator
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-    return CosmosClient(
-        url=settings.cosmos_url,
-        credential=settings.cosmos_key,
-        connection_verify=(settings.cosmos_use_emulator != "True"),
-    )
-
-
-@lru_cache
-def get_container() -> ContainerProxy:
-    client = get_cosmos_client()
-    return cosmos.setup_cosmos(client, db_id="mydb", container_id="default")
-
-
-@app.get("/")
+@app.get('/')
 async def root():
-    return {"message": "Hello World"}
+    return {'message': 'Hello World'}
 
 
-@app.post("/write")
+@app.post('/write')
 async def write_cosmos(
-    container: Annotated[ContainerProxy, Depends(dependency=get_container)],
+    container: Annotated[ContainerProxy, Depends(dependency=cosmos.get_cosmos_container)],
 ):
-    _res = container.upsert_item({"id": "my item 123"})
-    return {"message": "success"}
+    _res = container.upsert_item({'id': 'my item 123'})
+    return {'message': 'success'}
+
+
+@app.post('/blob')
+async def write_blob(
+    container: Annotated[ContainerClient, Depends(dependency=blob.get_blob_container)],
+):
+    blobs = [blob for blob in container.list_blob_names()]
+    if "myblob" not in blobs:
+        _res = container.upload_blob("myblob", "my data 123")
+    return {'message': 'success'}

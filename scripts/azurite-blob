@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+
+CONTAINER_NAME=azurite
+IMAGE_NAME=mcr.microsoft.com/azure-storage/azurite:latest
+BLOB_PORT=8082
+
+if [ "$1" = "start" ]; then
+    docker pull $IMAGE_NAME
+    docker run --rm -d --name=$CONTAINER_NAME -p $BLOB_PORT:$BLOB_PORT $IMAGE_NAME azurite-blob --blobPort $BLOB_PORT --blobHost 0.0.0.0
+    echo "Azurite blob service started"
+elif [ "$1" = "stop" ]; then
+    docker stop $CONTAINER_NAME
+    echo "Azurite blob service stopped"
+elif [ "$1" = "restart" ]; then
+    docker stop $CONTAINER_NAME || true
+    docker pull $IMAGE_NAME
+    docker run --rm -d --name=$CONTAINER_NAME -p $BLOB_PORT:$BLOB_PORT $IMAGE_NAME azurite-blob --blobPort $BLOB_PORT --blobHost 0.0.0.0
+    echo "Azurite blob service restarted"
+else
+    echo "Usage: azurite-blob <start|stop|restart>"
+    exit 1
+fi
