@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -e
+
+CONTAINER_NAME=cosmos-db
+IMAGE_NAME=mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+EMULATOR_PORT=8081
+
+if [ "$1" = "start" ]; then
+    docker pull $IMAGE_NAME
+    docker run --rm -d --name=$CONTAINER_NAME -p $EMULATOR_PORT:$EMULATOR_PORT -p 10250-10255:10250-10255 $IMAGE_NAME
+    echo "CosmosDB emulator started"
+    echo "Copy the URI and Primary key from https://localhost:$EMULATOR_PORT/_explorer/html into .env file as COSMOS_URL and COSMOS_KEY if this is your first time running"
+elif [ "$1" = "stop" ]; then
+    docker stop $CONTAINER_NAME
+    echo "CosmosDB emulator stopped"
+elif [ "$1" = "restart" ]; then
+    docker stop $CONTAINER_NAME || true
+    docker pull $IMAGE_NAME
+    docker run --rm -d --name=$CONTAINER_NAME -p $EMULATOR_PORT:$EMULATOR_PORT -p 10250-10255:10250-10255 $IMAGE_NAME
+    echo "CosmosDB emulator restarted"
+else
+    echo "Usage: cosmos <start|stop|restart>"
+    exit 1
+fi
